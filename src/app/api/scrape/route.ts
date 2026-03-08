@@ -7,6 +7,27 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "URL is required" }, { status: 400 });
         }
 
+        // Quick check if the URL is a direct media file
+        if (url.match(/\.(mp4|webm|mkv|m3u8)($|\?)/i)) {
+            const filenameRegex = /\/([^/?#]+)\.[a-z0-9]+($|\?)/i;
+            let rawTitle = url.match(filenameRegex)?.[1] || "Direct Video";
+            rawTitle = rawTitle.replace(/[-_]/g, " ");
+
+            const cleanTitle = rawTitle.trim();
+            const slug = cleanTitle.toLowerCase()
+                .replace(/[^a-z0-9\s]/g, "")
+                .replace(/\s+/g, "-")
+                .substring(0, 80);
+
+            return NextResponse.json({
+                thumbnail: null,
+                title: cleanTitle,
+                description: null,
+                duration: null,
+                slug,
+            });
+        }
+
         // Fetch the page HTML from the source URL
         const res = await fetch(url, {
             headers: {

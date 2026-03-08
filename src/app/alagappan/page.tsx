@@ -22,6 +22,7 @@ export default function AdminPage() {
         if (!sourceUrl) return;
         setScraping(true);
         setScraped(false);
+        setMessage("");
         try {
             const res = await fetch("/api/scrape", {
                 method: "POST",
@@ -29,13 +30,19 @@ export default function AdminPage() {
                 body: JSON.stringify({ url: sourceUrl }),
             });
             const data = await res.json();
+
+            if (!res.ok || data.error) {
+                setMessage(`❌ ${data.error || "Failed to scrape the URL."}`);
+                return;
+            }
+
             if (data.thumbnail) setThumbnail(data.thumbnail);
             if (data.title) setTitle(data.title);
             if (data.slug) setSlug(data.slug);
             if (data.duration) setDuration(String(data.duration));
             setScraped(true);
         } catch {
-            setMessage("❌ Could not scrape the URL. Check that it's a valid video page.");
+            setMessage("❌ Could not connect to the scraper API.");
         } finally {
             setScraping(false);
         }
