@@ -78,80 +78,30 @@ export default async function Home({
   };
 
   return (
-    <div className="flex flex-col gap-8 pb-16">
+    <div className="flex flex-col bg-white rounded-md shadow-sm border border-gray-100 p-4 md:p-6 mb-16 w-full">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Top Banner Ad */}
-      <AdSlot zoneId="top-home-banner" width={728} height={90} className="w-full max-w-[728px] hidden md:flex mx-auto" />
-
-      {/* ── TRENDING ROW ── */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-white">
-            <Flame className="h-5 w-5 text-primary" />
-            Trending Now
-          </h2>
-          <Link href="/search?sort=popular" className="text-xs text-primary hover:underline font-medium">
-            See all →
-          </Link>
+      {/* ── ULTIMATUBE TABS ── */}
+      <div className="flex flex-col gap-2 border-b border-gray-200 mb-6">
+        <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Newest</h1>
+        <div className="flex items-center gap-6 mt-2 overflow-x-auto hide-scrollbar whitespace-nowrap">
+          <Link href="/" className="pb-2 border-b-2 border-primary text-[14px] font-bold text-primary">Newest</Link>
+          <Link href="/search?sort=popular" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors">Best</Link>
+          <Link href="/search?sort=views" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors">Most viewed</Link>
+          <Link href="/search?sort=duration" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors">Longest</Link>
+          <Link href="/search?sort=random" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors">Random</Link>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3">
-          {trendingVideos.map((video: any) => (
-            <VideoCard key={`t-${video.id}`} {...video} />
-          ))}
-        </div>
-      </section>
+      </div>
 
-      {/* ── CATEGORY RECOMMENDATION ROWS (xHamster style) ── */}
-      {categoryRows.map((row, i) => (
-        <section key={row.category}>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="flex items-center gap-2 text-lg font-bold text-white">
-              <Tag className="h-4 w-4 text-primary" />
-              {row.category}
-              <span className="text-xs font-normal text-gray-500 ml-1">{row.count.toLocaleString()} videos</span>
-            </h2>
-            <Link href={`/search?q=${encodeURIComponent(row.category)}`} className="text-xs text-primary hover:underline font-medium">
-              More {row.category} →
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3">
-            {row.videos.map((video: any) => (
-              <VideoCard key={`cat-${video.id}-${i}`} {...video} />
-            ))}
-          </div>
-          {/* Inject mid-page ad every 2 rows */}
-          {i === 1 && (
-            <AdSlot zoneId={`mid-cat-ad-${i}`} width={728} height={90} className="w-full max-w-[728px] mx-auto mt-6 hidden md:flex" />
-          )}
-        </section>
-      ))}
-
-      {/* ── FRESH UPLOADS with Load More ── */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-white">
-            <Clock className="h-5 w-5 text-gray-400" />
-            Latest Videos
-            <span className="text-xs font-normal text-gray-500 ml-1">{totalNew.toLocaleString()} total</span>
-          </h2>
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-gray-500" />
-            <span className="text-xs text-gray-500">Page {page} of {Math.ceil(totalNew / take)}</span>
-          </div>
-        </div>
-
-        <HomePageClient
-          initialVideos={newVideos}
-          totalVideos={totalNew}
-          currentPage={page}
-          perPage={take}
-        />
-      </section>
-
+      <HomePageClient
+        initialVideos={newVideos}
+        totalVideos={totalNew}
+        currentPage={page}
+        perPage={take}
+      />
     </div>
   );
 }

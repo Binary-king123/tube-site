@@ -31,9 +31,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} bg-[#0d0d0d] text-gray-100 antialiased min-h-screen`}
+        className={`${inter.className} bg-background text-foreground antialiased min-h-screen flex flex-col`}
         suppressHydrationWarning
       >
         <AgeGate />

@@ -20,81 +20,93 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#0d0d0d]/95 backdrop-blur-md">
-                <div className="mx-auto flex h-14 max-w-[1700px] items-center gap-3 px-3 md:px-4 xl:px-6">
-
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-1.5 shrink-0 mr-2">
-                        <span className="text-xl font-black tracking-tighter text-primary drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]">
+            <header className="w-full bg-white shadow-sm border-b border-gray-200">
+                {/* Top tier: Logo, Search, Auth */}
+                <div className="mx-auto flex h-20 max-w-[1700px] items-center justify-between px-3 md:px-4 xl:px-6">
+                    {/* Logo (ULTIMATUBE style) */}
+                    <Link href="/" className="flex items-center shrink-0">
+                        <span className="text-3xl font-black tracking-tighter text-primary">
+                            ULTIMA
+                        </span>
+                        <span className="text-3xl font-black tracking-tighter text-gray-800">
                             TUBE
                         </span>
-                        <span className="text-xl font-black tracking-tighter text-white">X</span>
                     </Link>
 
-                    {/* Desktop nav links */}
-                    <nav className="hidden md:flex items-center gap-1 shrink-0">
-                        <Link href="/" className="flex items-center gap-1 rounded-md px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                            <Home className="h-4 w-4" /> Home
-                        </Link>
-                        <Link href="/search?sort=popular" className="flex items-center gap-1 rounded-md px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                            <Flame className="h-4 w-4 text-primary" /> Trending
-                        </Link>
-                        <Link href="/categories" className="flex items-center gap-1 rounded-md px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                            <Grid3X3 className="h-4 w-4" /> Categories
-                        </Link>
-                    </nav>
-
-                    {/* Search bar — grows in the centre */}
-                    <form onSubmit={handleSearch} className="flex-1 flex items-center gap-2 max-w-xl mx-auto">
-                        <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
-                            <input
-                                ref={inputRef}
-                                type="search"
-                                value={query}
-                                onChange={e => setQuery(e.target.value)}
-                                placeholder="Search videos, tags, categories…"
-                                className="w-full rounded-full border border-white/10 bg-[#1a1a1a] pl-9 pr-4 py-2 text-sm text-gray-200 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            />
-                        </div>
-                        <button type="submit" className="shrink-0 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/80 transition-colors hidden sm:block">
-                            Search
+                    {/* Search bar - hidden on very small screens, takes up exact middle */}
+                    <form onSubmit={handleSearch} className="hidden md:flex flex-1 items-center max-w-xl mx-8">
+                        <input
+                            ref={inputRef}
+                            type="search"
+                            value={query}
+                            onChange={e => setQuery(e.target.value)}
+                            placeholder="Search..."
+                            className="w-full rounded-l-md border border-gray-300 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-gray-400 transition-all"
+                        />
+                        <button type="submit" className="shrink-0 flex items-center justify-center rounded-r-md bg-[#e53e3e] px-6 py-2.5 text-white hover:bg-primary/95 transition-colors">
+                            <Search className="h-5 w-5" />
                         </button>
                     </form>
 
-                    {/* Premium badge */}
-                    <Link href="/" className="hidden xl:flex items-center gap-1 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 px-3 py-1.5 text-xs font-bold text-black hover:opacity-90 transition-opacity shrink-0">
-                        <Star className="h-3 w-3 fill-current" /> PREMIUM FREE
-                    </Link>
+                    {/* Right side auth buttons */}
+                    <div className="flex items-center gap-4 shrink-0">
+                        <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">
+                            Login
+                        </Link>
+                        <Link href="/register" className="rounded bg-[#e53e3e] px-5 py-2 text-sm font-medium tracking-wide text-white hover:bg-primary/90 transition-colors">
+                            Register
+                        </Link>
 
-                    {/* Mobile hamburger */}
-                    <button
-                        onClick={() => setMobileOpen(o => !o)}
-                        className="md:hidden ml-auto rounded-md p-2 text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
-                        aria-label="Menu"
-                    >
-                        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                    </button>
+                        {/* Mobile hamburger */}
+                        <button
+                            onClick={() => setMobileOpen(o => !o)}
+                            className="md:hidden ml-2 rounded-md p-1.5 text-gray-600 hover:bg-gray-100 transition-colors"
+                        >
+                            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Bottom tier: Nav Links */}
+                <div className="w-full bg-[#333333]">
+                    <nav className="mx-auto flex h-[46px] max-w-[1700px] items-center gap-8 px-3 md:px-4 xl:px-6 overflow-x-auto hide-scrollbar">
+                        <Link href="/" className="flex items-center gap-2 h-full border-b-[3px] border-primary text-[13px] font-bold text-white tracking-wide shrink-0">
+                            <Home className="h-4 w-4" /> Home
+                        </Link>
+                        <Link href="/categories" className="flex items-center gap-2 h-full border-b-[3px] border-transparent text-[13px] font-bold text-gray-200 hover:text-white transition-colors shrink-0">
+                            <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" /></svg>
+                            Categories
+                        </Link>
+                        <Link href="/tags" className="flex items-center gap-2 h-full border-b-[3px] border-transparent text-[13px] font-bold text-gray-200 hover:text-white transition-colors shrink-0">
+                            <Flame className="h-4 w-4" /> Tags
+                        </Link>
+                        <Link href="/actors" className="flex items-center gap-2 h-full border-b-[3px] border-transparent text-[13px] font-bold text-gray-200 hover:text-white transition-colors shrink-0">
+                            <Star className="h-4 w-4" /> Actors
+                        </Link>
+                    </nav>
                 </div>
             </header>
 
-            {/* Mobile slide-down menu */}
+            {/* Mobile search drop-down equivalent */}
             {mobileOpen && (
-                <div className="md:hidden fixed top-14 left-0 right-0 z-40 border-b border-white/10 bg-[#0d0d0d]/98 backdrop-blur-lg px-4 py-4 flex flex-col gap-2 shadow-xl">
-                    {[
-                        { href: "/", icon: <Home className="h-4 w-4" />, label: "Home" },
-                        { href: "/search?sort=popular", icon: <Flame className="h-4 w-4 text-primary" />, label: "Trending" },
-                        { href: "/categories", icon: <Grid3X3 className="h-4 w-4" />, label: "Categories" },
-                    ].map(l => (
-                        <Link
-                            key={l.href}
-                            href={l.href}
-                            onClick={() => setMobileOpen(false)}
-                            className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
-                        >
-                            {l.icon} {l.label}
-                        </Link>
-                    ))}
+                <div className="md:hidden border-b border-gray-200 bg-white px-4 py-4 flex flex-col gap-4 shadow-md">
+                    <form onSubmit={handleSearch} className="flex items-center w-full">
+                        <input
+                            type="search"
+                            value={query}
+                            onChange={e => setQuery(e.target.value)}
+                            placeholder="Search..."
+                            className="w-full rounded-l-md border border-gray-300 bg-white pl-3 py-2 text-sm text-gray-800 focus:outline-none"
+                        />
+                        <button type="submit" className="shrink-0 bg-[#e53e3e] px-4 py-2 rounded-r-md text-white">
+                            <Search className="h-5 w-5" />
+                        </button>
+                    </form>
+                    <div className="flex flex-col gap-1">
+                        <Link href="/" onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">Home</Link>
+                        <Link href="/categories" onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">Categories</Link>
+                        <Link href="/tags" onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">Tags</Link>
+                    </div>
                 </div>
             )}
         </>

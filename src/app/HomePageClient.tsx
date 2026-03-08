@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import VideoCard from "@/components/VideoCard";
 import { ChevronDown, Loader2 } from "lucide-react";
 
@@ -46,9 +46,18 @@ export default function HomePageClient({
 
     return (
         <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3">
-                {videos.map((video) => (
-                    <VideoCard key={video.id} {...video} />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 border-t border-gray-100 pt-5">
+                {videos.map((video, idx) => (
+                    <React.Fragment key={video.id}>
+                        <VideoCard {...video} />
+
+                        {/* Inject Native 300x250 Ad Block */}
+                        {(idx === 2 || idx === 7) && (
+                            <div className="hidden sm:flex col-span-1 min-h-[180px] bg-black text-white items-center justify-center font-bold text-3xl rounded-sm shadow-md">
+                                300x250
+                            </div>
+                        )}
+                    </React.Fragment>
                 ))}
             </div>
 
