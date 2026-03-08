@@ -1,4 +1,13 @@
 import { NextResponse } from "next/server";
+import ffmpeg from "fluent-ffmpeg";
+import ffmpegStatic from "ffmpeg-static";
+import fs from "fs";
+import path from "path";
+
+// Ensure FFmpeg is available in the environment
+if (ffmpegStatic) {
+    ffmpeg.setFfmpegPath(ffmpegStatic);
+}
 
 export async function POST(request: Request) {
     try {
@@ -19,11 +28,60 @@ export async function POST(request: Request) {
                 .replace(/\s+/g, "-")
                 .substring(0, 80);
 
+            // Generate thumbnail using FFmpeg
+            let thumbnailUrl = null;
+            let videoDuration = null;
+
+            try {
+                const thumbnailFilename = `thumb-${Date.now()}.png`;
+                const uploadDir = path.join(process.cwd(), "public", "uploads", "thumbnails");
+
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+
+                // First get video duration to see if we can extract it
+                await new Promise((resolve, reject) => {
+                    ffmpeg.ffprobe(url, (err: Error | null, metadata: ffmpeg.FfprobeData) => {
+                        if (!err && metadata && metadata.format && metadata.format.duration) {
+                            videoDuration = Math.round(metadata.format.duration);
+                        }
+                        resolve(true); // Don't crash if ffprobe fails
+                    });
+                });
+
+                // Then take a screenshot at the 10% mark to avoid black intro screens
+                await new Promise((resolve, reject) => {
+                    ffmpeg(url)
+                        .on('end', () => resolve(true))
+                        .on('error', (err: Error) => {
+                            console.error("FFMPEG extraction error:", err);
+                            resolve(false); // Fail gracefully if stream has issues
+                        })
+                        .screenshots({
+                            count: 1,
+                            timestamps: ['10%'],
+                            filename: thumbnailFilename,
+                            folder: uploadDir,
+                            size: '640x360'
+                        });
+                });
+
+                // Confirm file was created successfully
+                if (fs.existsSync(path.join(uploadDir, thumbnailFilename))) {
+                    thumbnailUrl = `/uploads/thumbnails/${thumbnailFilename}`;
+                }
+
+            } catch (ffmpegErr) {
+                console.error("Failed to generate MP4 thumbnail:", ffmpegErr);
+                // System should proceed and return null thumbnail instead of crashing the API
+            }
+
             return NextResponse.json({
-                thumbnail: null,
+                thumbnail: thumbnailUrl,
                 title: cleanTitle,
                 description: null,
-                duration: null,
+                duration: videoDuration,
                 slug,
             });
         }
