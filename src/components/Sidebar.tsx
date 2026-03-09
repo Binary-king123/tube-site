@@ -76,13 +76,13 @@ export default async function Sidebar() {
             {/* Mobile-hidden absolute bottom legal links */}
             <div className="mt-8 pt-6 border-t border-gray-150 flex flex-col gap-1">
                 <div className="flex flex-wrap gap-x-3 gap-y-1 px-3">
-                    {[["Terms", "/terms"], ["Privacy", "/privacy"], ["DMCA", "/dmca"]].map(([label, href]) => (
+                    {[["Terms", "/terms"], ["Privacy", "/privacy"], ["DMCA", "/dmca"], ["2257", "/2257"]].map(([label, href]) => (
                         <Link key={href} href={href} className="text-[11px] text-gray-500 hover:text-gray-800">
                             {label}
                         </Link>
                     ))}
                 </div>
-                <p className="text-[10px] text-gray-400 px-3 pt-2">© {new Date().getFullYear()} TUBE. 18+ Only.</p>
+                <p className="text-[10px] text-gray-400 px-3 pt-2">© {new Date().getFullYear()} ILOVEDESI. 18+ Only. All models 18+. 18 U.S.C. 2257 Record-Keeping Requirements Compliance Statement.</p>
             </div>
         </aside>
     );

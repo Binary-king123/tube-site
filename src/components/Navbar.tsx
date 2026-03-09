@@ -23,13 +23,13 @@ export default function Navbar() {
             <header className="w-full bg-white shadow-sm border-b border-gray-200">
                 {/* Top tier: Logo, Search, Auth */}
                 <div className="mx-auto flex h-20 max-w-[1700px] items-center justify-between px-3 md:px-4 xl:px-6">
-                    {/* Logo (ULTIMATUBE style) */}
+                    {/* Logo (ILOVEDESI style) */}
                     <Link href="/" className="flex items-center shrink-0">
-                        <span className="text-3xl font-black tracking-tighter text-primary">
-                            ULTIMA
+                        <span className="text-3xl font-black tracking-tighter text-primary lowercase">
+                            ilove
                         </span>
-                        <span className="text-3xl font-black tracking-tighter text-gray-800">
-                            TUBE
+                        <span className="text-3xl font-black tracking-tighter text-gray-800 lowercase">
+                            desi
                         </span>
                     </Link>
 

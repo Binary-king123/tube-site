@@ -6,7 +6,7 @@ export function Footer() {
 
                     <div className="flex flex-col gap-4">
                         <span className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                            TubeX
+                            ILOVEDESI
                         </span>
                         <p className="text-sm text-muted-foreground">
                             The premium aggregator for high quality adult content. Fast, free, and beautiful.
@@ -16,7 +16,6 @@ export function Footer() {
                     <div className="flex flex-col gap-3 text-sm">
                         <h4 className="font-semibold text-foreground">Content</h4>
                         <a href="/categories" className="text-muted-foreground hover:text-primary transition-colors">Categories</a>
-                        <a href="/trending" className="text-muted-foreground hover:text-primary transition-colors">Trending</a>
                         <a href="/new" className="text-muted-foreground hover:text-primary transition-colors">New Videos</a>
                     </div>
 
@@ -29,7 +28,6 @@ export function Footer() {
 
                     <div className="flex flex-col gap-3 text-sm">
                         <h4 className="font-semibold text-foreground">Contact</h4>
-                        <a href="/support" className="text-muted-foreground hover:text-foreground transition-colors">Support</a>
                         <a href="/dmca" className="text-muted-foreground hover:text-primary transition-colors">DMCA Notice</a>
                     </div>
 
@@ -37,7 +35,7 @@ export function Footer() {
 
                 <div className="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground">
                     <p>
-                        &copy; {new Date().getFullYear()} TubeX. All rights reserved.
+                        &copy; {new Date().getFullYear()} ILOVEDESI. All rights reserved.
                         All models appearing on this website were 18 years or older at the time of depiction.
                     </p>
                 </div>
