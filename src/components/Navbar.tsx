@@ -20,7 +20,7 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="w-full bg-white shadow-sm border-b border-gray-200">
+            <header className="w-full bg-[#0f0f0f] shadow-sm border-b border-white/10">
                 {/* Top tier: Logo, Search, Auth */}
                 <div className="mx-auto flex h-20 max-w-[1700px] items-center justify-between px-3 md:px-4 xl:px-6">
                     {/* Logo (ILOVEDESI style) */}
@@ -28,7 +28,7 @@ export default function Navbar() {
                         <span className="text-3xl font-black tracking-tighter text-primary lowercase">
                             ilove
                         </span>
-                        <span className="text-3xl font-black tracking-tighter text-gray-800 lowercase">
+                        <span className="text-3xl font-black tracking-tighter text-white lowercase">
                             desi
                         </span>
                     </Link>
@@ -41,7 +41,7 @@ export default function Navbar() {
                             value={query}
                             onChange={e => setQuery(e.target.value)}
                             placeholder="Search..."
-                            className="w-full rounded-l-md border border-gray-300 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-gray-400 transition-all"
+                            className="w-full rounded-l-md border border-white/20 bg-[#1a1a1a] pl-4 pr-10 py-2.5 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-white/40 transition-all"
                         />
                         <button type="submit" className="shrink-0 flex items-center justify-center rounded-r-md bg-[#e53e3e] px-6 py-2.5 text-white hover:bg-primary/95 transition-colors">
                             <Search className="h-5 w-5" />
@@ -53,7 +53,7 @@ export default function Navbar() {
                         {/* Mobile hamburger */}
                         <button
                             onClick={() => setMobileOpen(o => !o)}
-                            className="md:hidden ml-2 rounded-md p-1.5 text-gray-600 hover:bg-gray-100 transition-colors"
+                            className="md:hidden ml-2 rounded-md p-1.5 text-gray-400 hover:bg-white/10 transition-colors"
                         >
                             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                         </button>
@@ -82,23 +82,23 @@ export default function Navbar() {
 
             {/* Mobile search drop-down equivalent */}
             {mobileOpen && (
-                <div className="md:hidden border-b border-gray-200 bg-white px-4 py-4 flex flex-col gap-4 shadow-md">
+                <div className="md:hidden border-b border-white/10 bg-[#1a1a1a] px-4 py-4 flex flex-col gap-4 shadow-lg">
                     <form onSubmit={handleSearch} className="flex items-center w-full">
                         <input
                             type="search"
                             value={query}
                             onChange={e => setQuery(e.target.value)}
                             placeholder="Search..."
-                            className="w-full rounded-l-md border border-gray-300 bg-white pl-3 py-2 text-sm text-gray-800 focus:outline-none"
+                            className="w-full rounded-l-md border border-white/20 bg-[#222] pl-3 py-2 text-sm text-white focus:outline-none"
                         />
                         <button type="submit" className="shrink-0 bg-[#e53e3e] px-4 py-2 rounded-r-md text-white">
                             <Search className="h-5 w-5" />
                         </button>
                     </form>
                     <div className="flex flex-col gap-1">
-                        <Link href="/" onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">Home</Link>
-                        <Link href="/categories" onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">Categories</Link>
-                        <Link href="/tags" onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">Tags</Link>
+                        <Link href="/" onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/10 rounded-md">Home</Link>
+                        <Link href="/categories" onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/10 rounded-md">Categories</Link>
+                        <Link href="/tags" onClick={() => setMobileOpen(false)} className="px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/10 rounded-md">Tags</Link>
                     </div>
                 </div>
             )}

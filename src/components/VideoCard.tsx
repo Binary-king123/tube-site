@@ -117,11 +117,11 @@ export default function VideoCard({ id, title, slug, thumbnail, previewImages, d
 
             {/* Info below thumbnail */}
             <div className="flex flex-col gap-0.5 px-0.5 mt-1.5">
-                <h3 className="line-clamp-2 text-[14px] font-bold text-gray-900 leading-snug group-hover:text-primary transition-colors">
+                <h3 className="line-clamp-2 text-[14px] font-bold text-gray-100 leading-snug group-hover:text-primary transition-colors">
                     {title}
                 </h3>
                 <div className="flex items-center gap-3 text-[12px] font-bold mt-1">
-                    <span className="flex items-center gap-1.5 text-gray-500">
+                    <span className="flex items-center gap-1.5 text-gray-400">
                         <Eye className="h-4 w-4" />
                         {formatViews(views)}
                     </span>

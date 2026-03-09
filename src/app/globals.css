@@ -4,23 +4,23 @@
 
 @layer base {
   :root {
-    --background: #f9f9f9;
-    /* Light gray background for body */
-    --foreground: #222222;
-    /* Dark gray text */
+    --background: #0f0f0f;
+    /* Deep dark background */
+    --foreground: #f3f4f6;
+    /* Light gray/white text */
 
-    --card: #ffffff;
-    /* White cards */
-    --card-foreground: #222222;
+    --card: #1f1f1f;
+    /* Dark cards */
+    --card-foreground: #f3f4f6;
 
     --primary: #ef4444;
-    /* Red-500 for the accent like ULTIMATUBE */
+    /* Red-500 for the accent like ULTIMATUBE / ILOVEDESI */
     --primary-foreground: #ffffff;
 
-    --muted: #f1f5f9;
-    --muted-foreground: #64748b;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
 
-    --border: #e2e8f0;
+    --border: #27272a;
   }
 }
 

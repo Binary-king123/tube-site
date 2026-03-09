@@ -78,21 +78,21 @@ export default async function Home({
   };
 
   return (
-    <div className="flex flex-col bg-white rounded-md shadow-sm border border-gray-100 p-4 md:p-6 mb-16 w-full">
+    <div className="flex flex-col bg-[#141414] rounded-xl shadow-lg border border-white/5 p-4 md:p-6 mb-16 w-full">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       {/* ── ULTIMATUBE TABS ── */}
-      <div className="flex flex-col gap-2 border-b border-gray-200 mb-6">
-        <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Newest</h1>
+      <div className="flex flex-col gap-2 border-b border-white/10 mb-6">
+        <h1 className="text-2xl font-extrabold text-white tracking-tight">Newest</h1>
         <div className="flex items-center gap-6 mt-2 overflow-x-auto hide-scrollbar whitespace-nowrap">
           <Link href="/" className="pb-2 border-b-2 border-primary text-[14px] font-bold text-primary">Newest</Link>
-          <Link href="/search?sort=popular" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors">Best</Link>
-          <Link href="/search?sort=views" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors">Most viewed</Link>
-          <Link href="/search?sort=duration" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors">Longest</Link>
-          <Link href="/search?sort=random" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-500 hover:text-gray-900 transition-colors">Random</Link>
+          <Link href="/search?sort=popular" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-400 hover:text-white transition-colors">Best</Link>
+          <Link href="/search?sort=views" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-400 hover:text-white transition-colors">Most viewed</Link>
+          <Link href="/search?sort=duration" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-400 hover:text-white transition-colors">Longest</Link>
+          <Link href="/search?sort=random" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-400 hover:text-white transition-colors">Random</Link>
         </div>
       </div>
 

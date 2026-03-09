@@ -46,7 +46,7 @@ export default function HomePageClient({
 
     return (
         <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 border-t border-gray-100 pt-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 border-t border-white/10 pt-5">
                 {videos.map((video, idx) => (
                     <React.Fragment key={video.id}>
                         <VideoCard {...video} />
@@ -84,7 +84,7 @@ export default function HomePageClient({
             )}
 
             {!hasMore && videos.length > 0 && (
-                <p className="text-center text-xs text-gray-600 py-2">
+                <p className="text-center text-xs text-gray-500 py-2">
                     You&apos;ve reached the end — {totalVideos.toLocaleString()} videos total
                 </p>
             )}
