@@ -35,7 +35,7 @@ export default function DmcaPage() {
                     <Mail className="h-5 w-5 text-primary shrink-0" />
                     <div>
                         <p className="text-xs text-gray-500 mb-0.5">Send DMCA notices to</p>
-                        <p className="text-white font-medium">dmca@ilovedesi.com</p>
+                        <p className="text-white font-medium">dmca@ilovedesi.fun</p>
                     </div>
                 </div>
 
