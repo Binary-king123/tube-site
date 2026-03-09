@@ -33,14 +33,23 @@ export function VideoPlayer({ embedUrl, thumbnail, title }: VideoPlayerProps) {
                     </button>
                 </div>
             ) : (
-                <iframe
-                    src={embedUrl}
-                    title={title}
-                    allowFullScreen
-                    allow="autoplay; fullscreen"
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    className="absolute inset-0 h-full w-full border-none"
-                />
+                embedUrl.match(/\.(mp4|webm|mkv|m3u8)($|\?)/i) ? (
+                    <video
+                        src={embedUrl}
+                        controls
+                        autoPlay
+                        className="absolute inset-0 h-full w-full bg-black outline-none"
+                    />
+                ) : (
+                    <iframe
+                        src={embedUrl}
+                        title={title}
+                        allowFullScreen
+                        allow="autoplay; fullscreen"
+                        sandbox="allow-scripts allow-same-origin allow-presentation"
+                        className="absolute inset-0 h-full w-full border-none bg-black"
+                    />
+                )
             )}
         </div>
     );

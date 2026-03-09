@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
 import ffmpeg from "fluent-ffmpeg";
 import ffmpegStatic from "ffmpeg-static";
+// @ts-ignore
+import ffprobeStatic from "ffprobe-static";
 import fs from "fs";
 import path from "path";
 
 // Ensure FFmpeg is available in the environment
 if (ffmpegStatic) {
     ffmpeg.setFfmpegPath(ffmpegStatic);
+}
+if (ffprobeStatic && ffprobeStatic.path) {
+    ffmpeg.setFfprobePath(ffprobeStatic.path);
 }
 
 export async function POST(request: Request) {

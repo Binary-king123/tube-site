@@ -48,15 +48,8 @@ export default function Navbar() {
                         </button>
                     </form>
 
-                    {/* Right side auth buttons */}
+                    {/* Right side auth buttons - Removed per request */}
                     <div className="flex items-center gap-4 shrink-0">
-                        <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">
-                            Login
-                        </Link>
-                        <Link href="/register" className="rounded bg-[#e53e3e] px-5 py-2 text-sm font-medium tracking-wide text-white hover:bg-primary/90 transition-colors">
-                            Register
-                        </Link>
-
                         {/* Mobile hamburger */}
                         <button
                             onClick={() => setMobileOpen(o => !o)}

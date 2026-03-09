@@ -128,9 +128,9 @@ export default function AdminPage() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="embedUrl" className={labelClass}>Iframe Embed URL *</label>
-                        <input type="url" id="embedUrl" name="embedUrl" required placeholder="https://www.xvideos.com/embedframe/..." className={inputClass} />
-                        <p className="text-[11px] text-gray-600">Find this by right-clicking the video player on the source site → &quot;Copy iframe code&quot;</p>
+                        <label htmlFor="embedUrl" className={labelClass}>Iframe OR Direct MP4 URL *</label>
+                        <input type="url" id="embedUrl" name="embedUrl" required placeholder="https://.../embed/ OR https://.../video.mp4" className={inputClass} />
+                        <p className="text-[11px] text-gray-600">Paste an Iframe source URL from tube sites, or a direct link to an .mp4/.webm video file.</p>
                     </div>
 
                     <div className="flex flex-col gap-2">
