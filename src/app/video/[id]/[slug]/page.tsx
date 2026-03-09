@@ -38,6 +38,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         alternates: {
             canonical: `/video/${video.id}/${video.slug}`,
         },
+        openGraph: {
+            title: video.title,
+            description: `Watch ${video.title} online for free in HD.`,
+            url: `${process.env.NEXT_PUBLIC_APP_URL || "https://tubex.com"}/video/${video.id}/${video.slug}`,
+            siteName: "ILOVEDESI",
+            images: [
+                {
+                    url: video.thumbnail,
+                    width: 1280,
+                    height: 720,
+                    alt: `Watch ${video.title} - HD Thumbnail`,
+                },
+            ],
+            type: "video.other",
+            videos: [
+                {
+                    url: video.embedUrl,
+                    width: 1280,
+                    height: 720,
+                    type: "text/html",
+                }
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: video.title,
+            description: `Watch ${video.title} online for free in HD.`,
+            images: [video.thumbnail],
+        },
     };
 }
 

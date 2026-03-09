@@ -11,14 +11,36 @@ const inter = Inter({ subsets: ["latin"], display: "swap" });
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://tubex.com"),
   title: {
-    default: "TubeX – Free HD Adult Videos",
-    template: "%s | TubeX",
+    default: "ILOVEDESI – Free HD Adult Videos",
+    template: "%s | ILOVEDESI",
   },
   description:
-    "TubeX: Watch thousands of free HD adult videos. Indian, aunty, desi, amateur & more. Updated daily.",
+    "ILOVEDESI: Watch thousands of free HD adult videos. Indian, aunty, desi, amateur & more. Updated daily.",
   robots: {
     index: true,
     follow: true,
+  },
+  openGraph: {
+    title: "ILOVEDESI – Free HD Adult Videos",
+    description: "Watch thousands of free HD adult videos. Indian, aunty, desi, amateur & more.",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://tubex.com",
+    siteName: "ILOVEDESI",
+    images: [
+      {
+        url: "/og-image.jpg", // Create an og-image.jpg in the public folder eventually
+        width: 1200,
+        height: 630,
+        alt: "ILOVEDESI Preview Image",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ILOVEDESI – Free HD Adult Videos",
+    description: "Watch thousands of free HD adult videos. Indian, aunty, desi, amateur & more.",
+    images: ["/og-image.jpg"],
   },
   icons: {
     icon: "/favicon.ico",
