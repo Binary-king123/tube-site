@@ -16,7 +16,7 @@ export default function TermsPage() {
                 <p>This website contains adult content. By accessing this site, you confirm that you are 18 years of age or older, and that it is legal to view adult content in your jurisdiction.</p>
 
                 <h2 className="text-lg font-semibold text-white mt-4">2. Content Policy</h2>
-                <p>TubeX is an aggregator website. We link to content hosted on third-party platforms. We do not host, store, or distribute any video files directly on our servers. All video players are iframes embedded from their original source sites.</p>
+                <p>ILOVEDESI is an aggregator website. We link to content hosted on third-party platforms. We do not host, store, or distribute any video files directly on our servers. All video players are iframes embedded from their original source sites.</p>
 
                 <h2 className="text-lg font-semibold text-white mt-4">3. DMCA Compliance</h2>
                 <p>If you believe that any content linked on this site infringes your copyright, please send a DMCA takedown notice to our contact email. We will remove the link within 24 hours of a valid notice.</p>

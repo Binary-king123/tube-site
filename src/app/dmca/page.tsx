@@ -15,8 +15,8 @@ export default function DmcaPage() {
 
             <section className="flex flex-col gap-4 text-gray-300 text-sm leading-relaxed">
                 <div className="rounded-xl border border-white/10 bg-[#141414] p-5">
-                    <h2 className="text-base font-semibold text-white mb-2">About TubeX</h2>
-                    <p>TubeX is an aggregator. We do not host or store any video files. All videos are embedded via iframe from their original hosting platforms (e.g., XVideos, xHamster). If you believe a specific embedded link infringes your copyright, we will remove the listing from our index upon a valid DMCA request.</p>
+                    <h2 className="text-base font-semibold text-white mb-2">About ILOVEDESI</h2>
+                    <p>ILOVEDESI is an aggregator. We do not host or store any video files. All videos are embedded via iframe from their original hosting platforms (e.g., XVideos, xHamster). If you believe a specific embedded link infringes your copyright, we will remove the listing from our index upon a valid DMCA request.</p>
                 </div>
 
                 <div className="rounded-xl border border-primary/20 bg-primary/5 p-5">
@@ -35,7 +35,7 @@ export default function DmcaPage() {
                     <Mail className="h-5 w-5 text-primary shrink-0" />
                     <div>
                         <p className="text-xs text-gray-500 mb-0.5">Send DMCA notices to</p>
-                        <p className="text-white font-medium">dmca@tubex.com</p>
+                        <p className="text-white font-medium">dmca@ilovedesi.com</p>
                     </div>
                 </div>
 

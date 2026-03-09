@@ -6,10 +6,22 @@ const nextConfig = {
         ignoreDuringBuilds: true,
     },
     typescript: {
-        // !! WARN !!
         // Dangerously allow production builds to successfully complete even if
         // your project has type errors.
         ignoreBuildErrors: true,
+    },
+    images: {
+        // Allow external thumbnails from any source (xvideos, xhamster, etc.)
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: '**',
+            },
+            {
+                protocol: 'http',
+                hostname: '**',
+            },
+        ],
     },
 };
 
