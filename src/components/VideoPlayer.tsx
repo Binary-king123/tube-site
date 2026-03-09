@@ -30,11 +30,11 @@ export function VideoPlayer({ embedUrl, thumbnail, title }: VideoPlayerProps) {
             setIsPlaying(true);
         }
 
-        // 4. Cool-down timer: Re-enable the Ad Lock after 3 minutes (180,000ms)
-        // You can change this time to 5 minutes or 10 minutes depending on aggression
+        // 4. Cool-down timer: Re-enable the Ad Lock after 10 seconds (10,000ms)
+        // Extremely aggressive setting based on user request
         setTimeout(() => {
             setShowAdOverlay(true);
-        }, 3 * 60 * 1000);
+        }, 10000);
     };
 
     return (
