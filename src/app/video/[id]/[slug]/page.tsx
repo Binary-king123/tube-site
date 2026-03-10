@@ -156,7 +156,7 @@ export default async function WatchPage({ params }: Props) {
             <div className="flex flex-col xl:flex-row gap-6 pb-16">
                 {/* ── LEFT: Main Player Column ── */}
                 <div className="flex-1 min-w-0">
-                    <AdSlot zoneId="watch-top" width={728} height={90} className="hidden md:flex w-full mb-4" />
+                    {/* <AdSlot zoneId="watch-top" width={728} height={90} className="hidden md:flex w-full mb-4" /> */}
 
                     {/* Player */}
                     <VideoPlayer embedUrl={video.embedUrl} thumbnail={video.thumbnail} title={video.title} />
@@ -207,7 +207,7 @@ export default async function WatchPage({ params }: Props) {
                         )}
                     </div>
 
-                    <AdSlot zoneId="watch-below-player" width={728} height={90} className="hidden md:flex w-full mt-6" />
+                    {/* <AdSlot zoneId="watch-below-player" width={728} height={90} className="hidden md:flex w-full mt-6" /> */}
 
                     {/* ── RECOMMENDATION ROWS under the player ── */}
                     {relatedByCategory.length > 0 && (
@@ -251,7 +251,7 @@ export default async function WatchPage({ params }: Props) {
 
                 {/* ── RIGHT: Compact Sidebar (Related, up 8 videos) ── */}
                 <div className="w-full xl:w-72 shrink-0 flex flex-col gap-4">
-                    <AdSlot zoneId="watch-sidebar" width={300} height={250} className="w-full" />
+                    {/* <AdSlot zoneId="watch-sidebar" width={300} height={250} className="w-full" /> */}
 
                     <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Up Next</h3>
                     <div className="flex flex-col gap-3">

@@ -51,12 +51,13 @@ export default function HomePageClient({
                     <React.Fragment key={video.id}>
                         <VideoCard {...video} />
 
-                        {/* Inject Native 300x250 Ad Block */}
+                        {/* Inject Native 300x250 Ad Block (Temporarily Disabled)
                         {(idx === 2 || idx === 7) && (
                             <div className="hidden sm:flex col-span-1 min-h-[180px] bg-black text-white items-center justify-center font-bold text-3xl rounded-sm shadow-md">
                                 300x250
                             </div>
                         )}
+                        */}
                     </React.Fragment>
                 ))}
             </div>

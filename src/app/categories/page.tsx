@@ -39,7 +39,7 @@ export default async function CategoriesPage() {
 
     return (
         <div className="flex flex-col gap-10 pb-12">
-            <AdSlot zoneId="categories-top-banner" width={728} height={90} className="w-full max-w-[728px] hidden md:flex" />
+            {/* <AdSlot zoneId="categories-top-banner" width={728} height={90} className="w-full max-w-[728px] hidden md:flex" /> */}
 
             <section>
                 <div className="flex flex-col gap-2 border-b border-border pb-6 mb-8">

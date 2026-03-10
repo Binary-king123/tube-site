@@ -20,6 +20,8 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  referrer: "origin",
+
   openGraph: {
     title: "ILOVEDESI – Free HD Adult Videos",
     description: "Watch thousands of free HD adult videos. Indian, aunty, desi, amateur & more.",

@@ -11,7 +11,7 @@ interface VideoPlayerProps {
 
 export function VideoPlayer({ embedUrl, thumbnail, title }: VideoPlayerProps) {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [showAdOverlay, setShowAdOverlay] = useState(true);
+    const [showAdOverlay, setShowAdOverlay] = useState(false); // Ad overlay disabled for now
 
     // Pop-Under Ad Logic with Cooldown
     const handleAdClick = () => {
@@ -76,13 +76,15 @@ export function VideoPlayer({ embedUrl, thumbnail, title }: VideoPlayerProps) {
                     >
                         <Play className="h-10 w-10 ml-1 fill-current" />
                     </button>
+                    {/*
                     <div className="absolute top-4 right-4 bg-black/60 text-white text-[10px] uppercase font-bold px-2 py-1 rounded backdrop-blur-sm z-10">
                         Ad / Click to Play
                     </div>
+                    */}
                 </div>
             )}
 
-            {/* The Transparent Click-Gate Overlay */}
+            {/* The Transparent Click-Gate Overlay (Currently Disabled)
             {showAdOverlay && (
                 <div
                     onClick={handleAdClick}
@@ -90,6 +92,7 @@ export function VideoPlayer({ embedUrl, thumbnail, title }: VideoPlayerProps) {
                     title="Click to Play"
                 />
             )}
+            */}
         </div>
     );
 }
