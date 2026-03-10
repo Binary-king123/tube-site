@@ -62,16 +62,19 @@ export function VideoPlayer({ embedUrl, thumbnail, title }: VideoPlayerProps) {
 
             {/* The Initial Thumbnail and Play Button */}
             {!isPlaying && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <div
+                    onClick={() => setIsPlaying(true)}
+                    className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer group"
+                >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src={thumbnail}
                         alt={title}
-                        className="absolute inset-0 h-full w-full object-cover opacity-60"
+                        className="absolute inset-0 h-full w-full object-cover opacity-60 group-hover:opacity-75 transition-opacity"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                     <button
-                        className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full bg-primary/90 text-primary-foreground backdrop-blur-md"
+                        className="relative z-10 flex h-20 w-20 items-center justify-center rounded-full bg-primary/90 text-primary-foreground backdrop-blur-md group-hover:scale-110 transition-transform"
                         aria-label="Play Video"
                     >
                         <Play className="h-10 w-10 ml-1 fill-current" />
