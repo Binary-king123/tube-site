@@ -213,7 +213,7 @@ export default function AdminPage() {
                         </div>
                         <div className="flex items-center gap-3 w-full mt-2">
                             <span className="text-[10px] text-gray-500 font-bold uppercase shrink-0">OR PASTE URL:</span>
-                            <input type="url" id="thumbnail" name="thumbnail" required value={thumbnail} onChange={e => setThumbnail(e.target.value)} placeholder="Wait for upload, auto-fill, or paste link manually" className={inputClass} />
+                            <input type="text" id="thumbnail" name="thumbnail" required value={thumbnail} onChange={e => setThumbnail(e.target.value)} placeholder="Wait for upload, auto-fill, or paste link manually" className={inputClass} />
                         </div>
                         {thumbnail && (
                             // eslint-disable-next-line @next/next/no-img-element
