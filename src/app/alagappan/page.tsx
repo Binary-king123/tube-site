@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, DragEvent } from "react";
 import { addVideo } from "./actions";
-import { ShieldCheck, Upload, Wand2, Link as LinkIcon, Loader2, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Upload, Wand2, Link as LinkIcon, Loader2, CheckCircle2, Image as ImageIcon } from "lucide-react";
 
 export default function AdminPage() {
     const formRef = useRef<HTMLFormElement>(null);
@@ -17,6 +17,57 @@ export default function AdminPage() {
     const [duration, setDuration] = useState("");
     const [sourceUrl, setSourceUrl] = useState("");
     const [scraped, setScraped] = useState(false);
+    const [uploadingImage, setUploadingImage] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+
+    const handleFile = async (file: File) => {
+        if (!file.type.startsWith("image/")) {
+            setMessage("❌ Please upload a valid image file.");
+            return;
+        }
+
+        setUploadingImage(true);
+        const data = new FormData();
+        data.append("file", file);
+
+        try {
+            const res = await fetch("/api/upload", {
+                method: "POST",
+                body: data
+            });
+            const result = await res.json();
+
+            if (result.success) {
+                setThumbnail(result.url);
+                setMessage("✅ Image uploaded successfully!");
+            } else {
+                setMessage(`❌ Image Upload Failed: ${result.error}`);
+            }
+        } catch (error) {
+            setMessage("❌ Failed to connect to upload server.");
+        } finally {
+            setUploadingImage(false);
+            setIsDragging(false);
+        }
+    };
+
+    const onDragOver = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const onDragLeave = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+
+    const onDrop = async (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDragging(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            await handleFile(e.dataTransfer.files[0]);
+        }
+    };
 
     const handleAutoScrape = async () => {
         if (!sourceUrl) return;
@@ -134,11 +185,39 @@ export default function AdminPage() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="thumbnail" className={labelClass}>Thumbnail URL *</label>
-                        <input type="url" id="thumbnail" name="thumbnail" required value={thumbnail} onChange={e => setThumbnail(e.target.value)} placeholder="Auto-filled by scraper, or paste manually" className={inputClass} />
+                        <label className={labelClass}>Thumbnail Image Upload (Drag & Drop) *</label>
+                        <div
+                            onDragOver={onDragOver}
+                            onDragLeave={onDragLeave}
+                            onDrop={onDrop}
+                            className={`relative flex flex-col items-center justify-center rounded-xl py-6 border-2 border-dashed transition-all ${isDragging ? "border-primary bg-primary/10 scale-[1.02]" : "border-white/20 bg-[#1a1a1a] hover:border-primary/50"}`}
+                        >
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+                            />
+                            {uploadingImage ? (
+                                <div className="flex flex-col items-center gap-2 text-primary">
+                                    <Loader2 className="h-6 w-6 animate-spin" />
+                                    <span className="text-sm font-medium">Uploading image to server...</span>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center gap-2 text-gray-400 pointer-events-none">
+                                    <ImageIcon className="h-8 w-8 mb-1" />
+                                    <p className="text-sm font-bold text-white">Click to upload or drag & drop here</p>
+                                    <p className="text-xs">JPG, PNG, WEBP (Instantly saves to /public/uploads)</p>
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-3 w-full mt-2">
+                            <span className="text-[10px] text-gray-500 font-bold uppercase shrink-0">OR PASTE URL:</span>
+                            <input type="url" id="thumbnail" name="thumbnail" required value={thumbnail} onChange={e => setThumbnail(e.target.value)} placeholder="Wait for upload, auto-fill, or paste link manually" className={inputClass} />
+                        </div>
                         {thumbnail && (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={thumbnail} alt="Preview" className="mt-1 h-32 w-full rounded-md object-cover border border-white/10" />
+                            <img src={thumbnail} alt="Preview" className="mt-2 h-40 w-full rounded-md object-cover border border-white/10 shadow-lg bg-[#111]" />
                         )}
                     </div>
 
