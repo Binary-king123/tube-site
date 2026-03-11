@@ -86,7 +86,7 @@ export default function BulkUploadPage() {
                     </div>
                     
                     <textarea 
-                        className="w-full h-80 rounded-md border border-white/10 bg-[#1a1a1a] px-4 py-4 text-sm font-mono text-gray-300 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all leading-relaxed"
+                        className="w-full h-80 rounded-md border border-white/10 bg-[#1a1a1a] px-4 py-4 text-sm font-mono text-gray-300 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all leading-relaxed whitespace-pre overflow-x-auto"
                         placeholder="VM59:53 https://cdn.desibf.com/2026/03/Video.mp4&#10;VM59:54 https://desibf.com/.../Video.jpg"
                         value={textLogs}
                         onChange={(e) => setTextLogs(e.target.value)}
