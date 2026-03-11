@@ -256,8 +256,8 @@ export async function bulkImportText(formData: FormData) {
         const filenameWithExt = urlParts[urlParts.length - 1];
         const basename = filenameWithExt.replace(/\.[^/.]+$/, "");
 
-        // Find matching image line
-        const matchingImgLine = imgLines.find(l => l.includes(basename));
+        // Find matching image line (Case-insensitive)
+        const matchingImgLine = imgLines.find(l => l.toLowerCase().includes(basename.toLowerCase()));
         let thumbUrl = "";
         if (matchingImgLine) {
             const imgMatch = matchingImgLine.match(/(https?:\/\/[^\s]+)/);
