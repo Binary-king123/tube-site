@@ -1,78 +1,88 @@
 import { db } from "@/lib/db";
 import VideoCard from "@/components/VideoCard";
-import { AdSlot } from "@/components/AdSlot";
-import { Flame, Clock, TrendingUp, Tag } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
 import HomePageClient from "./HomePageClient";
 
-// Force server-side rendering on every request — needed for DB queries
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "TubeX – Free HD Adult Videos | Watch Online Free",
-  description: "TubeX: Watch the best free HD porn videos. Thousands of amateur, Indian, aunty, teen & more. Updated daily. Stream instantly, no ads on player.",
+  title: "ILOVEDESI – Free HD Adult Videos | Watch Online Free",
+  description: "ILOVEDESI: Watch the best free HD desi videos. Thousands of Indian, aunty, desi & more. Updated daily.",
   alternates: { canonical: "/" },
 };
+
+const PER_PAGE = 20;
+
+function Pagination({ page, totalPages }: { page: number; totalPages: number }) {
+  if (totalPages <= 1) return null;
+
+  const buildHref = (p: number) => `/?page=${p}`;
+  const delta = 4;
+  const start = Math.max(1, page - delta);
+  const end = Math.min(totalPages, page + delta);
+  const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+
+  return (
+    <div className="flex items-center justify-center gap-1 mt-10 flex-wrap">
+      {page > 1 && (
+        <Link href={buildHref(page - 1)} className="px-3 py-1.5 rounded text-sm font-medium bg-white/10 text-white hover:bg-primary hover:text-white transition-colors">
+          &laquo; Prev
+        </Link>
+      )}
+      {start > 1 && (
+        <>
+          <Link href={buildHref(1)} className="px-3 py-1.5 rounded text-sm font-medium bg-white/5 text-gray-300 hover:bg-primary hover:text-white transition-colors">1</Link>
+          {start > 2 && <span className="px-2 text-gray-500">…</span>}
+        </>
+      )}
+      {pages.map(p => (
+        <Link key={p} href={buildHref(p)}
+          className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${p === page ? "bg-primary text-white" : "bg-white/5 text-gray-300 hover:bg-primary hover:text-white"}`}>
+          {p}
+        </Link>
+      ))}
+      {end < totalPages && (
+        <>
+          {end < totalPages - 1 && <span className="px-2 text-gray-500">…</span>}
+          <Link href={buildHref(totalPages)} className="px-3 py-1.5 rounded text-sm font-medium bg-white/5 text-gray-300 hover:bg-primary hover:text-white transition-colors">{totalPages}</Link>
+        </>
+      )}
+      {page < totalPages && (
+        <Link href={buildHref(page + 1)} className="px-3 py-1.5 rounded text-sm font-medium bg-white/10 text-white hover:bg-primary hover:text-white transition-colors">
+          Next &raquo;
+        </Link>
+      )}
+    </div>
+  );
+}
 
 export default async function Home({
   searchParams,
 }: {
   searchParams?: { page?: string };
 }) {
-  const page = parseInt(searchParams?.page || "1");
-  const take = 24;
+  const page = Math.max(1, parseInt(searchParams?.page || "1"));
 
-  // 1. Trending (most views)
-  const trendingVideos = await db.video.findMany({
-    take: 12,
-    orderBy: { views: "desc" },
-  }).catch(() => []);
+  const [newVideos, totalNew] = await Promise.all([
+    db.video.findMany({
+      take: PER_PAGE,
+      skip: (page - 1) * PER_PAGE,
+      orderBy: { createdAt: "desc" },
+    }).catch(() => []),
+    db.video.count().catch(() => 0),
+  ]);
 
-  // 2. Fresh uploads
-  const newVideos = await db.video.findMany({
-    take: take,
-    skip: (page - 1) * take,
-    orderBy: { createdAt: "desc" },
-  }).catch(() => []);
-
-  const totalNew = await db.video.count().catch(() => 0);
-
-  // 3. Tag-based recommendation rows (like xHamster's category sections)
-  let categoryRows: { category: string; count: number; videos: any[] }[] = [];
-  try {
-    const categoryGroups = await db.video.groupBy({
-      by: ["category"],
-      where: { category: { not: null } },
-      _count: { category: true },
-      orderBy: { _count: { category: "desc" } },
-      take: 6,
-    });
-
-    categoryRows = await Promise.all(
-      categoryGroups.map(async (group: any) => {
-        const videos = await db.video.findMany({
-          where: { category: group.category },
-          take: 6,
-          orderBy: { views: "desc" },
-        });
-        return { category: group.category as string, count: group._count.category as number, videos };
-      })
-    );
-  } catch (e) {
-    console.error("Category groupBy failed:", e);
-    // Fail silently — page still renders without category rows
-    categoryRows = [];
-  }
+  const totalPages = Math.ceil(totalNew / PER_PAGE);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "TubeX",
-    url: process.env.NEXT_PUBLIC_APP_URL || "https://tubex.com",
+    name: "ILOVEDESI",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://ilovedesi.fun",
     potentialAction: {
       "@type": "SearchAction",
-      target: `${process.env.NEXT_PUBLIC_APP_URL || "https://tubex.com"}/search?q={search_term_string}`,
+      target: `${process.env.NEXT_PUBLIC_APP_URL || "https://ilovedesi.fun"}/search?q={search_term_string}`,
       "query-input": "required name=search_term_string"
     }
   };
@@ -84,24 +94,33 @@ export default async function Home({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* ── ULTIMATUBE TABS ── */}
+      {/* Sort Tabs */}
       <div className="flex flex-col gap-2 border-b border-white/10 mb-6">
         <h1 className="text-2xl font-extrabold text-white tracking-tight">Newest</h1>
         <div className="flex items-center gap-6 mt-2 overflow-x-auto hide-scrollbar whitespace-nowrap">
           <Link href="/" className="pb-2 border-b-2 border-primary text-[14px] font-bold text-primary">Newest</Link>
-          <Link href="/search?sort=popular" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-400 hover:text-white transition-colors">Best</Link>
+          <Link href="/search?sort=best" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-400 hover:text-white transition-colors">Best</Link>
           <Link href="/search?sort=views" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-400 hover:text-white transition-colors">Most viewed</Link>
           <Link href="/search?sort=duration" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-400 hover:text-white transition-colors">Longest</Link>
           <Link href="/search?sort=random" className="pb-2 border-b-2 border-transparent text-[14px] font-bold text-gray-400 hover:text-white transition-colors">Random</Link>
         </div>
       </div>
 
-      <HomePageClient
-        initialVideos={newVideos}
-        totalVideos={totalNew}
-        currentPage={page}
-        perPage={take}
-      />
+      {/* Video Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 border-t border-white/10 pt-5">
+        {newVideos.map((video: any) => (
+          <VideoCard key={video.id} {...video} />
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <Pagination page={page} totalPages={totalPages} />
+
+      {totalNew > 0 && (
+        <p className="text-center text-xs text-gray-500 py-4">
+          Page {page} of {totalPages} — {totalNew.toLocaleString()} videos total
+        </p>
+      )}
     </div>
   );
 }
