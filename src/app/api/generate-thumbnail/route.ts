@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
-import ffmpeg from "fluent-ffmpeg";
-import ffmpegInstaller from "@ffmpeg-installer/ffmpeg";
+import { exec } from "child_process";
+import { promisify } from "util";
 import path from "path";
 import fs from "fs";
 
-// Set fluent-ffmpeg to use the locally installed binaries
-ffmpeg.setFfmpegPath(ffmpegInstaller.path);
+const execAsync = promisify(exec);
 
-export const maxDuration = 60; // Allow function to run up to 60s for massive files
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
@@ -15,49 +13,39 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { targetUrl } = body;
 
-        if (!targetUrl || !targetUrl.endsWith(".mp4")) {
-            return NextResponse.json({ error: "Invalid video URL. Must be an MP4." }, { status: 400 });
+        if (!targetUrl || !targetUrl.toLowerCase().endsWith(".mp4")) {
+            return NextResponse.json({ error: "Invalid video URL. Must be an .mp4 URL." }, { status: 400 });
         }
 
-        // Directories
         const uploadDir = path.join(process.cwd(), "public", "uploads");
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }
 
-        const uniqueFilename = `autothumb_${Date.now()}_${Math.floor(Math.random() * 1000)}.jpg`;
+        const uniqueFilename = `autothumb_${Date.now()}_${Math.floor(Math.random() * 9999)}.jpg`;
         const outputPath = path.join(uploadDir, uniqueFilename);
 
-        // We wrap fluent-ffmpeg in a Promise
-        await new Promise<void>((resolve, reject) => {
-            ffmpeg(targetUrl)
-                .on("end", () => {
-                    resolve();
-                })
-                .on("error", (err) => {
-                    console.error("FFMPEG Error:", err);
-                    reject(err);
-                })
-                .screenshots({
-                    timestamps: ["00:00:05.000"], // Take screenshot exactly at 5 seconds
-                    filename: uniqueFilename,
-                    folder: uploadDir,
-                    size: "600x?" // Scale to roughly match tube site thumbnails
-                });
-        });
+        // Use the system ffmpeg binary directly.
+        // -ss 5: seek to 5 seconds, -frames:v 1: only one frame, -q:v 2: high quality JPEG.
+        const ffmpegBin = "/usr/bin/ffmpeg";
+        const cmd = `${ffmpegBin} -ss 00:00:05 -i "${targetUrl}" -frames:v 1 -q:v 2 -y "${outputPath}"`;
 
-        // Ensure file was actually created
+        // Give it 30 seconds max to grab the frame from the remote MP4
+        await execAsync(cmd, { timeout: 30000 });
+
         if (!fs.existsSync(outputPath)) {
-            throw new Error("FFMPEG completed but no file was written.");
+            throw new Error("ffmpeg ran but no thumbnail was created. The video may be too short or unavailable.");
         }
 
-        return NextResponse.json({ 
-            success: true, 
-            thumbnailUrl: `/uploads/${uniqueFilename}` 
+        return NextResponse.json({
+            success: true,
+            thumbnailUrl: `/uploads/${uniqueFilename}`,
         });
 
     } catch (error: any) {
-        console.error("Thumbnail Generation Failed:", error);
-        return NextResponse.json({ error: error.message || "Failed to generate thumbnail." }, { status: 500 });
+        console.error("Thumbnail Generation Error:", error?.message || error);
+        return NextResponse.json({ 
+            error: error?.message || "Failed to generate thumbnail. Make sure ffmpeg is installed on the server." 
+        }, { status: 500 });
     }
 }
