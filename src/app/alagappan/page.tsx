@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { addVideo } from "./actions";
 import { 
-  Upload, 
+  Upload,
   ListOrdered, 
   PlayCircle, 
   Image as ImageIcon, 
   SkipForward, 
   CheckCircle2, 
-  Loader2 
+  Loader2,
+  Wand2
 } from "lucide-react";
 
 type QueuedVideo = {
@@ -38,6 +39,7 @@ export default function QueueUploaderPage() {
   
   // UI State
   const [loading, setLoading] = useState(false);
+  const [generatingThumb, setGeneratingThumb] = useState(false);
   const [message, setMessage] = useState("");
 
   const parseText = () => {
@@ -150,6 +152,39 @@ export default function QueueUploaderPage() {
       }
   };
 
+  const handleGenerateThumbnail = async () => {
+      const activeVideo = queue[currentIndex];
+      if (!activeVideo?.sourceUrl) return;
+
+      setGeneratingThumb(true);
+      setMessage("");
+
+      try {
+          const res = await fetch("/api/generate-thumbnail", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ targetUrl: activeVideo.sourceUrl }),
+          });
+          const data = await res.json();
+
+          if (data.success && data.thumbnailUrl) {
+              // Update the specific item in the queue
+              setQueue((prevQueue) => {
+                  const newQueue = [...prevQueue];
+                  newQueue[currentIndex] = { ...newQueue[currentIndex], thumbnailUrl: data.thumbnailUrl };
+                  return newQueue;
+              });
+              setMessage("✅ Thumbnail generated from video!");
+          } else {
+              setMessage(`❌ Failed to auto-generate: ${data.error || "Unknown error"}`);
+          }
+      } catch (error: any) {
+          setMessage(`❌ Generation API error: ${error.message}`);
+      } finally {
+          setGeneratingThumb(false);
+      }
+  };
+
   const inputClass = "rounded-md border border-white/10 bg-[#1a1a1a] px-3 py-2.5 text-sm text-gray-100 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all w-full";
   const labelClass = "text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1.5";
 
@@ -217,7 +252,18 @@ export default function QueueUploaderPage() {
                   
                   {/* Left Column: Media Preview */}
                   <div className="flex flex-col gap-4 bg-[#141414] p-5 rounded-xl border border-white/10">
-                      <div className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-white/10 pb-3">Detected Media</div>
+                      <div className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-white/10 pb-3 flex justify-between items-center">
+                          Detected Media
+                          <button
+                              type="button"
+                              onClick={handleGenerateThumbnail}
+                              disabled={generatingThumb || !queue[currentIndex].sourceUrl}
+                              className="flex items-center gap-1.5 bg-white/5 hover:bg-white/10 text-white px-2 py-1 rounded text-[10px] transition-colors disabled:opacity-50"
+                          >
+                              {generatingThumb ? <Loader2 className="w-3 h-3 animate-spin"/> : <Wand2 className="w-3 h-3"/>}
+                              GENERATE FROM VIDEO
+                          </button>
+                      </div>
                       
                       <div className="flex flex-col gap-2">
                           <div className="flex items-center gap-2 text-sm text-gray-300 bg-black/40 p-3 rounded-md break-all">
