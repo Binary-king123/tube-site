@@ -9,6 +9,21 @@ export async function GET(request: Request) {
     }
 
     try {
+        const urlObj = new URL(targetUrl);
+        const host = urlObj.hostname;
+        
+        // Anti-SSRF Whitelist: Only allow proxying from trusted sources
+        const ALLOWED_DOMAINS = ["desibf.com", "cdn.desibf.com", "phncdn.com", "xvideos-cdn.com", "eporner.com"];
+        const isAllowed = ALLOWED_DOMAINS.some(d => host === d || host.endsWith("." + d));
+        
+        if (!isAllowed) {
+            return new NextResponse("Forbidden Domain", { status: 403 });
+        }
+    } catch (e) {
+        return new NextResponse("Invalid URL", { status: 400 });
+    }
+
+    try {
         // Fetch the external image, completely masking our server/domain to bypass basic HotLink protection
         const response = await fetch(targetUrl, {
             headers: {

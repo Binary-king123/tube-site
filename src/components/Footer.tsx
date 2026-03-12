@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
+import { SEO_KEYWORDS } from "@/constants/seo-keywords";
 
 export async function Footer() {
     // Fetch top 50 categories for SEO
@@ -19,9 +20,9 @@ export async function Footer() {
         // fail silently
     }
 
-    // Fetch top 200 tags for massive SEO cloud
+    // Fetch top 200 tags from DB for keyword cloud
     type TagRow = { tag: string };
-    let tags: string[] = [];
+    let dbTags: string[] = [];
     try {
         const tagRows = await db.$queryRaw<TagRow[]>`
             SELECT unnest(tags) AS tag, COUNT(*) AS count
@@ -30,13 +31,13 @@ export async function Footer() {
             ORDER BY count DESC
             LIMIT 200
         `;
-        tags = tagRows.map((r: TagRow) => r.tag).filter(Boolean);
+        dbTags = tagRows.map((r: TagRow) => r.tag).filter(Boolean);
     } catch {
         // fail silently
     }
 
-    // Combine and deduplicate
-    const allKeywords = Array.from(new Set([...categories, ...tags]));
+    // Merge DB categories + DB tags + Static keyword bank — deduplicated
+    const allKeywords = Array.from(new Set([...categories, ...dbTags, ...SEO_KEYWORDS]));
 
     return (
         <footer className="border-t border-border bg-background py-10 mt-10">
@@ -74,26 +75,25 @@ export async function Footer() {
 
                 </div>
 
-                {/* MASSIVE SEO KEYWORD BLOCK */}
-                {allKeywords.length > 0 && (
-                    <div className="py-8">
-                        <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
-                            Popular Searches & Categories
-                        </h4>
-                        <div className="flex flex-wrap gap-x-2 gap-y-1.5 leading-snug">
-                            {allKeywords.map((kw, i) => (
-                                <Link 
-                                    key={`${kw}-${i}`} 
-                                    href={`/search?q=${encodeURIComponent(kw)}`}
-                                    className="text-[11px] text-muted-foreground/60 hover:text-primary hover:underline lowercase whitespace-nowrap"
-                                    title={`Watch free ${kw} porn videos`}
-                                >
-                                    {kw}{i < allKeywords.length - 1 ? "," : ""}
-                                </Link>
-                            ))}
-                        </div>
+                {/* ===== MASSIVE SEO KEYWORD CLOUD ===== */}
+                {/* Contains DB categories + DB tags + 500+ static niche keywords for maximum indexing */}
+                <div className="py-8">
+                    <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
+                        Popular Searches &amp; Categories
+                    </h4>
+                    <div className="flex flex-wrap gap-x-2 gap-y-1.5 leading-snug">
+                        {allKeywords.map((kw, i) => (
+                            <Link 
+                                key={`${kw}-${i}`} 
+                                href={`/search?q=${encodeURIComponent(kw)}`}
+                                className="text-[11px] text-muted-foreground/50 hover:text-primary hover:underline lowercase whitespace-nowrap"
+                                title={`Watch free ${kw} porn videos`}
+                            >
+                                {kw}{i < allKeywords.length - 1 ? "," : ""}
+                            </Link>
+                        ))}
                     </div>
-                )}
+                </div>
 
                 <div className="pt-6 text-center text-[10px] sm:text-xs text-muted-foreground">
                     <p>

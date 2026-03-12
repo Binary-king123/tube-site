@@ -19,7 +19,7 @@ export default function LoginPage() {
         startTransition(async () => {
             const result = await authenticateAdmin(user, pwd);
             if (result.success) {
-                router.push("/alagappan");
+                router.push("/dashboard");
                 router.refresh();
             } else {
                 setError(result.error || "Login failed");

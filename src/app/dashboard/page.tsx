@@ -199,7 +199,7 @@ export default function QueueUploaderPage() {
               </h1>
               <p className="text-sm text-gray-500">Paste mixed `.mp4` and `.jpg` URLs. The system will pair them and queue them up for rapid tagging.</p>
           </div>
-          <a href="/alagappan/bulk" className="flex items-center justify-center gap-2 rounded-md bg-[#1a1a1a] border border-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/5 transition-colors">
+          <a href="/dashboard/bulk" className="flex items-center justify-center gap-2 rounded-md bg-[#1a1a1a] border border-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/5 transition-colors">
               <Upload className="h-4 w-4 text-primary" />
               Old Bulk CSV
           </a>
