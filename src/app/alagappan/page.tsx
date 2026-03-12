@@ -229,7 +229,7 @@ export default function QueueUploaderPage() {
                       {queue[currentIndex].thumbnailUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img 
-                              src={queue[currentIndex].thumbnailUrl} 
+                              src={queue[currentIndex].thumbnailUrl.startsWith("http") ? `/api/proxy-image?url=${encodeURIComponent(queue[currentIndex].thumbnailUrl)}` : queue[currentIndex].thumbnailUrl} 
                               alt="Detected thumbnail" 
                               className="w-full aspect-video object-cover rounded-lg shadow-lg border border-white/5 bg-black"
                           />

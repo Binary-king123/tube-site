@@ -11,7 +11,7 @@ export async function addVideo(formData: FormData) {
     const title = formData.get("title") as string;
     const slug = formData.get("slug") as string;
     const embedUrl = formData.get("embedUrl") as string;
-    const thumbnail = formData.get("thumbnail") as string;
+    let thumbnail = formData.get("thumbnail") as string;
     const durationStr = formData.get("duration") as string;
     const category = formData.get("category") as string;
     const tagsStr = formData.get("tags") as string;
@@ -31,7 +31,36 @@ export async function addVideo(formData: FormData) {
             finalSlug = `${slug}-${Math.random().toString(36).substring(2, 7)}`;
         }
 
-        // 1. Create the video
+        // 1. Intercept Image to bypass hotlinking and permanently host it locally
+        if (thumbnail && thumbnail.startsWith("http") && !thumbnail.includes(process.env.NEXT_PUBLIC_APP_URL || "ilovedesi")) {
+            try {
+                const uploadDir = join(process.cwd(), "public", "uploads");
+                if (!existsSync(uploadDir)) {
+                    await mkdir(uploadDir, { recursive: true });
+                }
+
+                const imgRes = await fetch(thumbnail, {
+                    headers: {
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                        "Referer": "" // bypass hotlinking restrictions
+                    }
+                });
+
+                if (imgRes.ok) {
+                    const ext = thumbnail.split('.').pop()?.toLowerCase().split('?')[0] || 'jpg';
+                    const uniqueName = `thumb_${Date.now()}_${Math.round(Math.random() * 1e4)}.${ext}`;
+                    const buffer = Buffer.from(await imgRes.arrayBuffer());
+                    await writeFile(join(uploadDir, uniqueName), buffer);
+                    thumbnail = `/uploads/${uniqueName}`; // Override external URL with local saved image
+                } else {
+                    console.warn(`[addVideo] Failed to download image (Status: ${imgRes.status}): ${thumbnail}`);
+                }
+            } catch (imgErr) {
+                console.warn(`[addVideo] Failed to fetch image manually: ${imgErr}`);
+            }
+        }
+
+        // 2. Create the video with local thumbnail
         await db.video.create({
             data: {
                 title,
@@ -44,7 +73,7 @@ export async function addVideo(formData: FormData) {
             },
         });
 
-        // 2. Auto-create category if new
+        // 3. Auto-create category if new
         if (category) {
             await db.category.upsert({
                 where: { name: category },
