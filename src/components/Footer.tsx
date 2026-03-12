@@ -57,6 +57,7 @@ export async function Footer() {
                         <Link href="/categories" className="text-muted-foreground hover:text-primary transition-colors">Categories</Link>
                         <Link href="/tags" className="text-muted-foreground hover:text-primary transition-colors">Tags</Link>
                         <Link href="/search?sort=newest" className="text-muted-foreground hover:text-primary transition-colors">New Videos</Link>
+                        <Link href="/latest" className="text-muted-foreground hover:text-primary transition-colors">Latest Archive</Link>
                     </div>
 
                     <div className="flex flex-col gap-3 text-sm">
