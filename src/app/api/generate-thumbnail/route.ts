@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         // Use the system ffmpeg binary directly.
         // -ss 5: seek to 5 seconds, -frames:v 1: only one frame, -q:v 2: high quality JPEG.
         const ffmpegBin = "/usr/bin/ffmpeg";
-        const cmd = `${ffmpegBin} -ss 00:00:05 -i "${targetUrl}" -frames:v 1 -q:v 2 -y "${outputPath}"`;
+        const cmd = `${ffmpegBin} -ss 00:00:10 -i "${targetUrl}" -frames:v 1 -q:v 2 -y "${outputPath}"`;
 
         // Give it 30 seconds max to grab the frame from the remote MP4
         await execAsync(cmd, { timeout: 30000 });
