@@ -109,8 +109,9 @@ export default async function WatchPage({ params }: Props) {
             "@type": "VideoObject",
             name: video.title,
             description: `Watch ${video.title} on TubeX.`,
-            thumbnailUrl: [video.thumbnail],
-            uploadDate: video.createdAt.toISOString(),
+            thumbnailUrl: video.thumbnail.startsWith("http") ? video.thumbnail : `${process.env.NEXT_PUBLIC_APP_URL || "https://ilovedesi.fun"}${video.thumbnail}`,
+            uploadDate: video.createdAt.toISOString().split('T')[0],
+            contentUrl: video.embedUrl.startsWith("http") ? video.embedUrl : `${process.env.NEXT_PUBLIC_APP_URL || "https://ilovedesi.fun"}${video.embedUrl}`,
             duration: video.duration
                 ? `PT${Math.floor(video.duration / 60)}M${video.duration % 60}S`
                 : undefined,

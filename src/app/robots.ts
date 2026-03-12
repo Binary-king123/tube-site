@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
         rules: {
             userAgent: '*',
             allow: '/',
-            disallow: ['/alagappan/', '/api/', '/search?q='], // Prevent indexing of infinite search params or admin pages
+            disallow: ['/alagappan/', '/api/', '/search'],
         },
         sitemap: `${baseUrl}/sitemap.xml`,
     };
