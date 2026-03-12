@@ -75,12 +75,12 @@ export default function VideoCard({ id, title, slug, thumbnail, previewImages, d
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={currentImg}
-                    alt={title}
+                    alt={`Watch ${title} Free HD Porn Video`}
+                    title={`${title} - Free Adult Video`}
                     draggable={false}
                     className={`absolute inset-0 h-full w-full object-cover transition-all duration-300 ${isHovered ? "scale-105 brightness-90" : "scale-100"}`}
                     loading="lazy"
                 />
-
                 {/* Hover overlay gradient */}
                 {isHovered && (
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
