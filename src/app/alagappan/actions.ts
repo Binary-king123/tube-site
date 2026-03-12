@@ -75,13 +75,29 @@ export async function addVideo(formData: FormData) {
 
         // 3. Auto-create category if new
         if (category) {
+            const catName = category.trim();
+            const catSlug = catName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+            
+            // Because name and slug are both @unique, we need to match carefully
             await db.category.upsert({
-                where: { name: category },
+                where: { name: catName },
                 update: {},
                 create: {
-                    name: category,
-                    slug: category.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+                    name: catName,
+                    slug: catSlug,
                 },
+            }).catch(async () => {
+                // If it failed, it might be a slug collision with a differently cased name.
+                // Just fallback to finding by slug, and if not present, add random suffix to slug.
+                const exists = await db.category.findUnique({ where: { slug: catSlug } });
+                if (!exists) {
+                    await db.category.create({
+                        data: {
+                            name: catName + ` ${Math.floor(Math.random() * 1000)}`,
+                            slug: catSlug + `-${Math.floor(Math.random() * 1000)}`
+                        }
+                    }).catch(() => {});
+                }
             });
         }
 
@@ -218,13 +234,25 @@ export async function bulkImportVideos(formData: FormData) {
                 });
 
                 if (category) {
+                    const catName = category.trim();
+                    const catSlug = catName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
                     await db.category.upsert({
-                        where: { name: category },
+                        where: { name: catName },
                         update: {},
                         create: {
-                            name: category,
-                            slug: category.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+                            name: catName,
+                            slug: catSlug,
                         },
+                    }).catch(async () => {
+                        const exists = await db.category.findUnique({ where: { slug: catSlug } });
+                        if (!exists) {
+                            await db.category.create({
+                                data: {
+                                    name: catName + ` ${Math.floor(Math.random() * 1000)}`,
+                                    slug: catSlug + `-${Math.floor(Math.random() * 1000)}`
+                                }
+                            }).catch(() => {});
+                        }
                     });
                 }
 
@@ -363,13 +391,25 @@ export async function bulkImportText(formData: FormData) {
             });
 
             if (defaultCategory) {
+                const catName = defaultCategory.trim();
+                const catSlug = catName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
                 await db.category.upsert({
-                    where: { name: defaultCategory },
+                    where: { name: catName },
                     update: {},
                     create: {
-                        name: defaultCategory,
-                        slug: defaultCategory.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+                        name: catName,
+                        slug: catSlug,
                     },
+                }).catch(async () => {
+                    const exists = await db.category.findUnique({ where: { slug: catSlug } });
+                    if (!exists) {
+                        await db.category.create({
+                            data: {
+                                name: catName + ` ${Math.floor(Math.random() * 1000)}`,
+                                slug: catSlug + `-${Math.floor(Math.random() * 1000)}`
+                            }
+                        }).catch(() => {});
+                    }
                 });
             }
 
