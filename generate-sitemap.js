@@ -4,7 +4,7 @@
  * This creates a static sitemap.xml in the public/ folder that Google can ALWAYS fetch.
  */
 
-const { PrismaClient } = require("./src/generated/prisma");
+const { PrismaClient } = require("@prisma/client");
 const fs = require("fs");
 const path = require("path");
 
