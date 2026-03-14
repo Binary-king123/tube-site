@@ -3,6 +3,10 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
+function escapeXml(str: string) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+
 export async function GET() {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ilovedesi.fun";
 
@@ -16,38 +20,49 @@ export async function GET() {
             duration: true,
             createdAt: true,
         },
-        orderBy: {
-            createdAt: "desc",
-        },
-        take: 40000, // Safe limit for a single sitemap file (Max 50,000)
+        orderBy: { createdAt: "desc" },
+        take: 40000,
     });
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
     xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n`;
 
     for (const video of videos) {
+        const safeTitle = escapeXml(video.title);
+
+        // ✅ Thumbnail: Route external thumbs through our proxy so Google can always fetch them
+        let thumbUrl: string;
+        if (video.thumbnail.startsWith("/uploads/") || video.thumbnail.startsWith("/thumbs/")) {
+            thumbUrl = `${baseUrl}${video.thumbnail}`;
+        } else if (video.thumbnail.startsWith("http")) {
+            thumbUrl = `${baseUrl}/api/proxy-image?url=${encodeURIComponent(video.thumbnail)}`;
+        } else {
+            thumbUrl = `${baseUrl}${video.thumbnail}`;
+        }
+
+        // ✅ Content URL: Always use our watch page as player_loc
+        let playerLoc = `${baseUrl}/video/${video.id}/${video.slug}`;
+        let contentLoc: string | null = null;
+        if (video.embedUrl.startsWith("/uploads/")) {
+            contentLoc = `${baseUrl}${video.embedUrl}`;
+        }
+
         xml += `  <url>\n`;
         xml += `    <loc>${baseUrl}/video/${video.id}/${video.slug}</loc>\n`;
         xml += `    <lastmod>${video.createdAt.toISOString()}</lastmod>\n`;
-        
         xml += `    <video:video>\n`;
-        
-        const imgUrl = video.thumbnail.startsWith("http") ? video.thumbnail : `${baseUrl}${video.thumbnail}`;
-        xml += `      <video:thumbnail_loc>${imgUrl}</video:thumbnail_loc>\n`;
-        
-        const safeTitle = video.title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+        xml += `      <video:thumbnail_loc>${thumbUrl}</video:thumbnail_loc>\n`;
         xml += `      <video:title>${safeTitle}</video:title>\n`;
-        xml += `      <video:description>Watch ${safeTitle} HD video on ILOVEDESI.</video:description>\n`;
-        
-        const contentUrl = video.embedUrl.startsWith("http") ? video.embedUrl : `${baseUrl}${video.embedUrl}`;
-        xml += `      <video:content_loc>${contentUrl}</video:content_loc>\n`;
-        
+        xml += `      <video:description>Watch ${safeTitle} free HD video on ILOVEDESI.</video:description>\n`;
+        xml += `      <video:player_loc>${playerLoc}</video:player_loc>\n`;
+        if (contentLoc) {
+            xml += `      <video:content_loc>${contentLoc}</video:content_loc>\n`;
+        }
         if (video.duration) {
             xml += `      <video:duration>${video.duration}</video:duration>\n`;
         }
-        
         xml += `      <video:publication_date>${video.createdAt.toISOString()}</video:publication_date>\n`;
-        
+        xml += `      <video:family_friendly>no</video:family_friendly>\n`;
         xml += `    </video:video>\n`;
         xml += `  </url>\n`;
     }
